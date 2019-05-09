@@ -4,11 +4,12 @@
 #include <string>
 #include <vector>
 
+#include "chain.hpp"
+
 class WordPrediction {
-    virtual void Add(const std::vector<std::string>& seq) = 0;
-    virtual std::vector<std::string> Predict(std::vector<std::string> words) = 0;
-    virtual std::string Generate(std::vector<std::string> words) = 0;
-    virtual bool Load() = 0;
+    virtual void Add(const std::string& chainName, const NGram& seq) = 0;
+    virtual std::vector<std::string> Predict(const std::string& chainName, const NGram& seq) = 0;
+    virtual std::string Generate(const std::string& chainName, const NGram& seq) = 0;
 };
 
 #endif

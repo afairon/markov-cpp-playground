@@ -1,10 +1,15 @@
 #include <iostream>
 #include <cpprest/http_listener.h>
 #include <cpprest/json.h>
+#include <fstream>
+#include <cstdlib>
+#include <ctime>
 
 #include "markov.hpp"
 #include "microservice_controller.hpp"
 #include "interupt_handler.hpp"
+#include "chain.hpp"
+#include "utils.hpp"
 
 using namespace std;
 using namespace web;
@@ -13,6 +18,8 @@ using namespace utility;
 using namespace web::http::experimental::listener;
 
 int main(int argc, char** argv) {
+
+    srand(time(NULL));
     
     MicroserviceController server("http://127.0.0.1:34568");
 

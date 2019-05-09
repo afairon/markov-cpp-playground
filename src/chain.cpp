@@ -95,3 +95,10 @@ vector<Pair> MakePairs(const vector<string>& tokens, const size_t order)
 
     return pairs;
 }
+
+void Chain::print() {
+    map<string, int>::iterator it;
+    for (it = stateMap.begin(); it != stateMap.end(); ++it) {
+        cout << it->first << endl;
+    }
+}

@@ -16,10 +16,9 @@ class MarkovChain : public WordPrediction {
         MarkovChain(uint8_t ord) : order(ord) {}
         ~MarkovChain() {}
 
-        void Add(const std::vector<std::string>& seq) override;
-        std::vector<std::string> Predict(std::vector<std::string> words) override;
-        std::string Generate(std::vector<std::string> words) override;
-        bool Load() override;
+        void Add(const std::string& chainName, const NGram& seq) override;
+        std::vector<std::string> Predict(const std::string& chainName, const NGram& seq) override;
+        std::string Generate(const std::string& chainName, const NGram& seq) override;
 };
 
 #endif
