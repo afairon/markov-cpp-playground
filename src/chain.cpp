@@ -30,17 +30,25 @@ int Chain::AddState(string str)
 // Add create a map spool
 void Chain::Add(const vector<string>& seq)
 {
-    vector<Pair> pairs = MakePairs(seq, this->Order);
-    for (int i = 0; i < pairs.size(); i++) {
-        Pair pair = pairs[i];
-        int currentIndex = this->AddState(join(pair.CurrentState, "_"));
-        int nextIndex = this->AddState(pair.NextState);
-        if (this->freqMat.find(currentIndex) == this->freqMat.end()) {
-            SparseArray temp;
-            temp.insert(make_pair(nextIndex, 0));
-            this->freqMat.insert(make_pair(currentIndex, temp));
+    for (int k = Order; k > 0; --k) {
+        vector<string> tokens;
+        vector<string> startTokens = fill<string>(StartToken, k);
+        vector<string> endTokens = fill<string>(EndToken, k);
+        tokens.insert(tokens.end(), startTokens.begin(), startTokens.end());
+        tokens.insert(tokens.end(), seq.begin(), seq.end());
+        tokens.insert(tokens.end(), endTokens.begin(), endTokens.end());
+        vector<Pair> pairs = MakePairs(tokens, k);
+        for (int i = 0; i < pairs.size(); i++) {
+            Pair pair = pairs[i];
+            int currentIndex = this->AddState(join(pair.CurrentState, "_"));
+            int nextIndex = this->AddState(pair.NextState);
+            if (this->freqMat.find(currentIndex) == this->freqMat.end()) {
+                SparseArray temp;
+                temp.insert(make_pair(nextIndex, 0));
+                this->freqMat.insert(make_pair(currentIndex, temp));
+            }
+            this->freqMat[currentIndex][nextIndex]++;
         }
-        this->freqMat[currentIndex][nextIndex]++;
     }
 }
 
@@ -103,9 +111,43 @@ void Chain::Read(const string& filepath) {
     vector<string> tokens;
     ifstream fs(filepath);
 
+    if (fs.fail()) {
+        return;
+    }
+
     while (!fs.eof()) {
         getline(fs, line);
         tokens = split(line, ' ');
         Add(tokens);
+    }
+    fs.close();
+}
+
+void Chain::PrintState()
+{
+    map<string, int>::iterator it;
+    for (it = this->stateMap.begin(); it != this->stateMap.end(); ++it) {
+        cout << it->first << ":" << it->second << endl;
+    }
+}
+
+void Chain::PrintIntMap()
+{
+    map<int, string>::iterator it;
+    for (it = this->intMap.begin(); it != this->intMap.end(); ++it) {
+        cout << it->first << ":" << it->second << endl;
+    }
+}
+
+void Chain::PrintFreq()
+{
+    map<int, SparseArray>::iterator it;
+    map<int, int>::iterator ik;
+    for (it = this->freqMat.begin(); it != this->freqMat.end(); ++it) {
+        cout << it->first << " ";
+        for (ik = it->second.begin(); ik != it->second.end(); ++ik) {
+            cout << ik->first << ":" << ik->second << " ";
+        }
+        cout << endl;
     }
 }
