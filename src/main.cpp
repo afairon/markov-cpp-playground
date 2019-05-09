@@ -3,6 +3,7 @@
 #include <cpprest/json.h>
 
 #include "server.hpp"
+#include "interupt_handler.hpp"
 
 using namespace std;
 using namespace web;
@@ -12,9 +13,21 @@ using namespace web::http::experimental::listener;
 
 int main(int argc, char** argv) {
 
-    Server server;
+    Server server("http://127.0.0.1:34568");
 
-    server.accept().wait();
+    try {
+        server.accept().wait();
+
+        cout << "Listening on " << server.uri() << endl;
+        cout << "Waiting for incomming connections..." << endl;
+
+        InteruptHandler::waitInterupt();
+
+        server.shutdown().wait();
+    } catch (exception& e) {
+        cerr << "Something wrong happened!" << endl;
+        cerr << "Shutting down server" << endl;
+    }
 
     return 0;
 }
