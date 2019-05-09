@@ -2,6 +2,7 @@
 #include <cpprest/http_listener.h>
 #include <cpprest/json.h>
 
+#include "markov.hpp"
 #include "microservice_controller.hpp"
 #include "interupt_handler.hpp"
 
@@ -19,7 +20,7 @@ int main(int argc, char** argv) {
         server.accept().wait();
 
         cout << "Listening on " << server.uri() << endl;
-        cout << "Waiting for incomming connections..." << endl;
+        cout << "Waiting for incoming connections..." << endl;
 
         InteruptHandler::waitInterupt();
 

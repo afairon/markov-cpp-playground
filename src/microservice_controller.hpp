@@ -6,6 +6,7 @@
 #include <pplx/pplxtasks.h>
 
 #include "controller.hpp"
+#include "markov.hpp"
 
 using namespace web;
 using namespace http;

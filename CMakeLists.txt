@@ -12,6 +12,7 @@ set(SERVER_SRC
     src/microservice.cpp
     src/router.cpp
     src/markov.cpp
+    src/chain.cpp
     src/utils.cpp
 )
 

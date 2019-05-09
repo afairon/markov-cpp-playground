@@ -18,7 +18,7 @@ struct Pair
     std::string NextState;
 };
 
-class MarkovChain
+class Chain
 {
 private:
     uint8_t Order;
@@ -26,18 +26,13 @@ private:
     std::map<int, SparseArray> freqMat;
     std::map<int, std::string> intMap;
 public:
-    MarkovChain(uint8_t ord) : Order(ord) {}
-    ~MarkovChain() {}
+    Chain(uint8_t ord) : Order(ord) {}
+    ~Chain() {}
     void Add(const std::vector<std::string>& seq);
-    void PrintState();
-    void PrintFreq();
-    void PrintIntMap();
     std::string Generate(NGram current);
 protected:
     int AddState(std::string str);
 };
-
-MarkovChain* NewChain(uint8_t order);
 
 std::vector<Pair> MakePairs(const std::vector<std::string>& tokens, const size_t order);
 
