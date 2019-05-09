@@ -42,7 +42,7 @@ class InterupHandler {
     +waitInterupt():static void
 }
 
-Controller <-- MicroserviceController
+Controller <|-- MicroserviceController
 
 abstract class WordPrediction {
     {method}+Add(words:string[]):void
