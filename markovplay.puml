@@ -36,14 +36,14 @@ class MicroserviceController {
     +opHandlers():void
 }
 
-class InterupHandler {
+class InteruptHandler {
     +hookSIGINT():static void
     +HandleInterupt(signal:int):static void
     +waitInterupt():static void
 }
 
 Controller <|-- MicroserviceController
-Controller ..> InterupHandler
+Controller ..> InteruptHandler
 
 abstract class WordPrediction {
     {method}+Add(words:string[]):void
