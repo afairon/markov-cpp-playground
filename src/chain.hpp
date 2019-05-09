@@ -30,6 +30,7 @@ public:
     ~Chain() {}
     void Add(const std::vector<std::string>& seq);
     std::string Generate(NGram current);
+    void print();
 protected:
     int AddState(std::string str);
 };
