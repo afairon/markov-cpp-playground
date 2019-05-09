@@ -12,6 +12,7 @@
 
 using namespace std;
 
+// AddState add state to chain
 int MarkovChain::AddState(string str)
 {
     int index;
@@ -52,6 +53,7 @@ void MarkovChain::Add(const vector<string>& seq)
     }
 }
 
+// Generate returns predicted word
 string MarkovChain::Generate(const NGram& current)
 {
     if (this->stateMap.find(join(current, "_")) == this->stateMap.end()) {
@@ -106,6 +108,7 @@ vector<Pair> MakePairs(const vector<string>& tokens, const size_t order)
     return pairs;
 }
 
+// Read read file and add chain
 void MarkovChain::Read(const string& filepath) {
     string line;
     vector<string> tokens;

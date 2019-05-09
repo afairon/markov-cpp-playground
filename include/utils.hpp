@@ -17,7 +17,9 @@ std::vector<T> fill(T value, int count)
     return arr;
 }
 
+// join returns string
 std::string join(const std::vector<std::string>& tokens, std::string del);
+// split returns vector
 std::vector<std::string> split(std::string str, char delimiter);
 
 #endif

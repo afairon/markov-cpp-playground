@@ -22,6 +22,7 @@ int main(int argc, char** argv) {
     
     MicroserviceController server("http://127.0.0.1:34568");
 
+    // Initialize markov chain
     MarkovChain chain(2);
     for (int i = 1; i < argc; ++i) {
         chain.Read(argv[i]);
@@ -30,6 +31,7 @@ int main(int argc, char** argv) {
     server.setChain(&chain);
 
     try {
+        // Waiting for incoming connections
         server.accept().wait();
 
         cout << "Listening on " << server.uri() << endl;

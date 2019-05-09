@@ -23,6 +23,7 @@ abstract Controller {
 }
 
 class MicroserviceController {
+    -chain:WordPrediction*
     -responseNotImpl(method:const http::method&):json::value
     +MicroserviceController(addr:const string&)
     +~MicroserviceController()
@@ -46,36 +47,29 @@ Controller <|-- MicroserviceController
 Controller ..> InteruptHandler
 
 abstract class WordPrediction {
-    {method}+Add(words:string[]):void
-    {method}+Predict(words:string[]):string[]
-    {method}+Generate(words:strings[]):string
+    +WordPrediction()
+    +~WordPrediction()
+    +Add(seq:const NGram&):virtual void
+    +Generate(seq:const NGram&):virtual void
 }
 
 Class MarkovChain {
-    {field}-chain:Chain
-    {method}+MarkovChain()
-    {method}+Add(words:string[]):void
-    {method}+Predict(words:string[]):string[]
-    {method}+Generate(words:string[]):string
-    {method}+TransitionProbability(string, string[]):double
-    {method}+Read(is:istream*):void
-    {method}+Write(os:ostream*):void
-}
-
-class Chain {
-    {field}-chain:map<string,Node[]>
-    {method}+insert(node:Node):void
-}
-
-class Node {
-    {field}-next:<string,double>
-    {method}+GetFreq():double
+    -Order:uint8_t
+    -stateMap:map<string, int>
+    -freqMap:map<int, SparseArray> freqMat
+    -intMap:map<int, string> intMap
+    #addState(str:string):void
+    +MarkovChain(ord:uint8_t)
+    +~MarkovChain()
+    +Add(seq:NGram&):void
+    +Generate(current:NGram&):string
+    +Read(filepath:const string&):void
 }
 
 ' Word prediction
 WordPrediction <|-- MarkovChain
-MarkovChain "1" o-- "1" Chain
-Chain "1" o-- "*" Node
+
+MicroserviceController o-- WordPrediction
 
 note left of WordPrediction : For maintainbility and compatibility purposes,\nthe developer can implement\nhis/her own word prediction algorithm
 

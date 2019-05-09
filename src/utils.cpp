@@ -5,6 +5,7 @@
 
 using namespace std;
 
+// join joins vector of string and seperate with delimiter
 string join(const vector<string>& tokens, string del)
 {
     string res;
@@ -18,6 +19,7 @@ string join(const vector<string>& tokens, string del)
     return res;
 }
 
+// split returns vector of string seperate with delimiter
 vector<string> split(string str, char delimiter)
 {
     vector<string> internal;
