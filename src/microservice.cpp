@@ -4,6 +4,10 @@
 using namespace web;
 using namespace http;
 
+void MicroserviceController::opHandlers() {
+    _listener.support(methods::GET, std::bind(&MicroserviceController::handleGet, this, std::placeholders::_1));
+}
+
 void MicroserviceController::handleGet(http_request message) {
     message.reply(status_codes::NotImplemented, responseNotImpl(methods::GET));
 }
