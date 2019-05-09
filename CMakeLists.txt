@@ -6,13 +6,13 @@ enable_testing()
 
 find_package(Boost REQUIRED system)
 
+include_directories(include/)
+
 set(SERVER_SRC
     src/main.cpp
     src/controller.cpp
     src/microservice.cpp
-    src/router.cpp
-    src/markov.cpp
-    src/chain.cpp
+    src/markovchain.cpp
     src/utils.cpp
 )
 

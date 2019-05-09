@@ -5,6 +5,8 @@
 #include <map>
 #include <vector>
 
+#include "wordprediction.hpp"
+
 typedef std::map<int, int> SparseArray;
 typedef std::vector<std::string> NGram;
 
@@ -18,7 +20,7 @@ struct Pair
     std::string NextState;
 };
 
-class Chain
+class MarkovChain : public WordPrediction
 {
 private:
     uint8_t Order;
@@ -26,14 +28,11 @@ private:
     std::map<int, SparseArray> freqMat;
     std::map<int, std::string> intMap;
 public:
-    Chain(uint8_t ord) : Order(ord) {}
-    ~Chain() {}
-    void Add(const std::vector<std::string>& seq);
-    std::string Generate(NGram current);
+    MarkovChain(uint8_t ord) : Order(ord) {}
+    ~MarkovChain() {}
+    void Add(const NGram& seq) override;
+    std::string Generate(const NGram& current) override;
     void Read(const std::string& filepath);
-    void PrintState();
-    void PrintFreq();
-    void PrintIntMap();
 protected:
     int AddState(std::string str);
 };

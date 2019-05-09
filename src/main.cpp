@@ -7,7 +7,7 @@
 
 #include "microservice_controller.hpp"
 #include "interupt_handler.hpp"
-#include "chain.hpp"
+#include "markovchain.hpp"
 #include "utils.hpp"
 
 using namespace std;
@@ -22,11 +22,10 @@ int main(int argc, char** argv) {
     
     MicroserviceController server("http://127.0.0.1:34568");
 
-    Chain chain(2);
-    /*for (int i = 0; i < argc; ++i) {
+    MarkovChain chain(2);
+    for (int i = 1; i < argc; ++i) {
         chain.Read(argv[i]);
-    }*/
-    chain.Read("speeches.txt");
+    }
 
     server.setChain(&chain);
 
