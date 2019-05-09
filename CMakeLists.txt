@@ -8,6 +8,7 @@ find_package(Boost REQUIRED system)
 
 set(SERVER_SRC
     src/main.cpp
+    src/server.cpp
     src/controller.cpp
     src/microservice.cpp
 )
