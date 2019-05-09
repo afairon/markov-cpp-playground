@@ -12,8 +12,13 @@ class Server {
     protected:
         http_listener _listener;
     public:
-        Server() {}
+        Server(const std::string addr) {
+            uri_builder uri(addr);
+            _listener = http_listener(uri.to_uri());
+        }
         ~Server() {}
+
+        std::string uri() const;
 
         pplx::task<void> accept();
         pplx::task<void> shutdown();
