@@ -3,12 +3,16 @@
 
 #include <string>
 #include <vector>
+#include <cpprest/http_listener.h>
 #include <cpprest/http_msg.h>
 
 using namespace web;
 using namespace http;
+using namespace http::experimental::listener;
 
 class Controller {
+    protected:
+        http_listener _listener;
     public:
         Controller() {}
         ~Controller() {}
