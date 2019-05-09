@@ -27,6 +27,7 @@ class MicroserviceController : public Controller {
     private:
         file_type getExt(const std::string& file) const;
         static json::value responseNotImpl(const http::method& method);
+        void serveStatic(const std::string& path, const http_request& message);
     public:
         MicroserviceController(const std::string& addr) : Controller(addr) {}
         ~MicroserviceController() {}

@@ -1,3 +1,5 @@
+#include <iostream>
+#include <cpprest/filestream.h>
 #include "microservice_controller.hpp"
 #include "version.hpp"
 
@@ -35,17 +37,82 @@ file_type MicroserviceController::getExt(const std::string& file) const {
     return UNKNOWN;
 }
 
+void MicroserviceController::serveStatic(const std::string& filepath, const http_request& message) {
+    auto path = requestPath(message);
+    std::string uri, file, ext, content_type;
+    file_type type;
+    if (path.size() < 2) {
+        message.reply(status_codes::NotFound);
+        return;
+    }
+
+    uri = "static";
+    for (int i = 1; i < path.size(); ++i) {
+        uri += "/";
+        uri += path[i];
+    }
+
+    file = path[path.size()-1];
+
+    type = getExt(file);
+
+    switch (type) {
+        case HTML:
+            content_type = "text/html; charset=UTF-8";
+            break;
+        case CSS:
+            content_type = "text/css; charset=UTF-8";
+            break;
+        case JS:
+            content_type = "text/javascript; charset=UTF-8";
+            break;
+        case JPEG:
+            content_type = "image/jpeg";
+            break;
+        case PNG:
+            content_type = "image/png";
+            break;
+        case WEBP:
+            content_type = "image/webp";
+            break;
+        default:
+            content_type = "application/octet-stream";
+            break;
+    }
+
+    concurrency::streams::fstream::open_istream(U(uri), std::ios::in).then([=](concurrency::streams::istream is) {
+        message.reply(status_codes::OK, is, content_type).then([=](pplx::task<void> t) {
+            try {
+                t.get();
+            } catch (...) {
+                message.reply(status_codes::InternalError);
+            }
+        });
+    }).then([=](pplx::task<void> t) {
+        try {
+            t.get();
+        } catch (...) {
+            message.reply(status_codes::NotFound);
+        }
+    });
+
+    return;
+}
+
 void MicroserviceController::handleGet(http_request message) {
     auto path = requestPath(message);
     if (!path.empty()) {
-        if (path.size() > 1 && path[0] == "api" && path[1] == "predict") {
+
+        if (path[0] == "static") {
+            return serveStatic("static", message);
+        } else if (path.size() > 1 && path[0] == "api" && path[1] == "predict") {
             auto response = json::value::object();
             response["key"] = json::value::string("val");
             message.reply(status_codes::OK, response);
             return;
         }
     }
-    message.reply(status_codes::NotFound, "404 NOT FOUND");
+    message.reply(status_codes::NotFound);
 }
 
 void MicroserviceController::handlePost(http_request message) {
