@@ -9,15 +9,9 @@ void MarkovChain::Add(const std::string& chainName, const NGram& seq) {
         chains.insert(pair<string, Chain>(chainName, chain));
     }
     chain.Add(seq);
-    chains.at("t").print();
 }
 
 string MarkovChain::Generate(const string& chainName, const NGram& seq) {
-    map<string, Chain>::iterator it;
-    for (it = chains.begin(); it != chains.end(); ++it) {
-        cout << "Key: " << it->first << " " << chainName << endl;
-        it->second.print();
-    }
     /*auto chain = chains["t"];
     chain.print();
     if (chains.find(chainName) == chains.end()) {

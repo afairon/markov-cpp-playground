@@ -23,6 +23,13 @@ int main(int argc, char** argv) {
     
     MicroserviceController server("http://127.0.0.1:34568");
 
+    Chain chain(2);
+    for (int i = 0; i < argc; ++i) {
+        chain.Read(argv[i]);
+    }
+
+    server.setChain(&chain);
+
     try {
         server.accept().wait();
 
