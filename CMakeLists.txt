@@ -4,6 +4,8 @@ project(markovplay VERSION 0.1.0)
 include(CTest)
 enable_testing()
 
+find_package(Boost REQUIRED system)
+
 set(SERVER_SRC
     src/main.cpp
 )
