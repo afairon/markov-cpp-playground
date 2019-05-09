@@ -45,7 +45,7 @@ void MicroserviceController::handleGet(http_request message) {
             return;
         }
     }
-    message.reply(status_codes::NotImplemented, responseNotImpl(methods::GET));
+    message.reply(status_codes::NotFound, "404 NOT FOUND");
 }
 
 void MicroserviceController::handlePost(http_request message) {
