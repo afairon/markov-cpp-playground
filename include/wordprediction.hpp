@@ -6,6 +6,7 @@
 
 typedef std::vector<std::string> NGram;
 
+// WordPrediction abstract class for word prediction
 class WordPrediction {
     public:
         WordPrediction() {}

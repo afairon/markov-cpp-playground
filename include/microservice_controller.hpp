@@ -12,6 +12,7 @@ using namespace web;
 using namespace http;
 using namespace http::experimental::listener;
 
+// File text extension
 typedef enum {
     UNKNOWN,
     HTML,
@@ -23,6 +24,7 @@ typedef enum {
     ICO
 } file_type;
 
+// Controller for handling REST method
 class MicroserviceController : public Controller {
     private:
         file_type getExt(const std::string& file) const;

@@ -7,6 +7,7 @@
 using namespace web;
 using namespace http;
 
+// opHandlers init REST method
 void MicroserviceController::opHandlers() {
     _listener.support(methods::GET, std::bind(&MicroserviceController::handleGet, this, std::placeholders::_1));
     _listener.support(methods::POST, std::bind(&MicroserviceController::handlePost, this, std::placeholders::_1));
@@ -17,6 +18,7 @@ void MicroserviceController::opHandlers() {
     _listener.support(methods::OPTIONS, std::bind(&MicroserviceController::handleOptions, this, std::placeholders::_1));
 }
 
+// getExt returns file type
 file_type MicroserviceController::getExt(const std::string& file) const {
     std::string ext = file.substr(file.find_last_of(".") + 1);
     if (ext == "html") {
@@ -38,6 +40,7 @@ file_type MicroserviceController::getExt(const std::string& file) const {
     return UNKNOWN;
 }
 
+// serveStatic serve static files
 void MicroserviceController::serveStatic(const std::string& filepath, const http_request& message) {
     auto path = requestPath(message);
     std::string uri, file, ext, content_type;
@@ -100,6 +103,7 @@ void MicroserviceController::serveStatic(const std::string& filepath, const http
     return;
 }
 
+// handleGet handles GET event
 void MicroserviceController::handleGet(http_request message) {
     auto path = requestPath(message);
     if (!path.empty()) {
@@ -129,16 +133,25 @@ void MicroserviceController::handleGet(http_request message) {
     });
 }
 
+// handlePost handles POST event
 void MicroserviceController::handlePost(http_request message) {
     auto path = requestPath(message);
     if (!path.empty()) {
+
+        // Precict word
         if (path.size() > 1 && path[0] == "api" && path[1] == "predict") {
             auto response = json::value::object();
             auto req = message.extract_json().get();
             auto seq = req["seq"].as_string();
-            response["next"] = json::value::string(chain->Generate(split(seq, ' ')));
+            std::string next = chain->Generate(split(seq, ' '));
+            response["next"] = json::value::string("");
+            if (next.length() > 1 && next != EndToken) {
+                response["next"] = json::value::string(next);
+            }
             message.reply(status_codes::OK, response);
             return;
+
+        // Train user-defined model
         } else if (path.size() > 1 && path[0] == "api" && path[1] == "train") {
             auto response = json::value::object();
             auto req = message.extract_json().get();
@@ -152,26 +165,32 @@ void MicroserviceController::handlePost(http_request message) {
     message.reply(status_codes::NotImplemented, responseNotImpl(methods::POST));
 }
 
+// handlePut handles PUT event
 void MicroserviceController::handlePut(http_request message) {
     message.reply(status_codes::NotImplemented, responseNotImpl(methods::PUT));
 }
 
+// handleDelete handles DELETE event
 void MicroserviceController::handleDelete(http_request message) {
     message.reply(status_codes::NotImplemented, responseNotImpl(methods::DEL));
 }
 
+// handlePatch handles Patch event
 void MicroserviceController::handlePatch(http_request message) {
     message.reply(status_codes::NotImplemented, responseNotImpl(methods::PATCH));
 }
 
+// handleHead handles HEAD event
 void MicroserviceController::handleHead(http_request message) {
     message.reply(status_codes::NotImplemented, responseNotImpl(methods::HEAD));
 }
 
+// handleOptions handles OPTIONS event
 void MicroserviceController::handleOptions(http_request message) {
     message.reply(status_codes::NotImplemented, responseNotImpl(methods::OPTIONS));
 }
 
+// responseNotImpl returns default message when method has not been implemented yet
 json::value MicroserviceController::responseNotImpl(const http::method& method) {
     auto response = json::value::object();
 
@@ -182,6 +201,7 @@ json::value MicroserviceController::responseNotImpl(const http::method& method) 
     return response;
 }
 
+// setChain assigns Markov chain to controller
 void MicroserviceController::setChain(WordPrediction* ch) {
     chain = ch;
 }
