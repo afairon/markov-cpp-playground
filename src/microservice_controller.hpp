@@ -11,7 +11,7 @@ using namespace web;
 using namespace http;
 using namespace http::experimental::listener;
 
-typedef enum file_type {
+typedef enum {
     UNKNOWN,
     HTML,
     CSS,
@@ -20,7 +20,7 @@ typedef enum file_type {
     PNG,
     WEBP,
     ICO
-};
+} file_type;
 
 class MicroserviceController : public Controller {
     private:

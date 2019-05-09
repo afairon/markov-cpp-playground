@@ -10,6 +10,7 @@ set(SERVER_SRC
     src/main.cpp
     src/controller.cpp
     src/microservice.cpp
+    src/router.cpp
 )
 
 add_executable(markovplay ${SERVER_SRC})
