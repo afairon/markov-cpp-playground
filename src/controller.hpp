@@ -30,6 +30,7 @@ class Controller {
         
         virtual void opHandlers() = 0;
 
+        std::string relativePath(const http_request& message);
         std::vector<std::string> requestPath(const http_request& message);
 
         std::string uri() const;

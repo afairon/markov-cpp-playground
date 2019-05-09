@@ -1,0 +1,81 @@
+@startuml Markov Playground
+
+skinparam classFontSize 16
+skinparam ClassAttributeFontSize 14
+
+abstract Controller {
+    #_listener:http_listener
+    +Controller(addr:const string&)
+    +~Controller()
+    +handleGet(message:http_request):virtual void
+    +handlePost(message:http_request):virtual void
+    +handlePut(message:http_request):virtual void
+    +handleDelete(message:http_request):virtual void
+    +handlePatch(message:http_request):virtual void
+    +handleHead(message:http_request):virtual void
+    +handleOptions(message:http_request):virtual void
+    +opHandlers():virtual void
+    +relativePath(message:const http_request&):string
+    +requestPath(message:const http_request&):vector<string>
+    +uri() const:string
+    +accept():pplx::task<void>
+    +shutdown():pplx::task<void>
+}
+
+class MicroserviceController {
+    -responseNotImpl(method:const http::method&):json::value
+    +MicroserviceController(addr:const string&)
+    +~MicroserviceController()
+    +handleGet(message:http_request):virtual void
+    +handlePost(message:http_request):virtual void
+    +handlePut(message:http_request):virtual void
+    +handleDelete(message:http_request):virtual void
+    +handlePatch(message:http_request):virtual void
+    +handleHead(message:http_request):virtual void
+    +handleOptions(message:http_request):virtual void
+    +opHandlers():virtual void
+}
+
+class InterupHandler {
+    +hookSIGINT():static void
+    +HandleInterupt(signal:int):static void
+    +waitInterupt():static void
+}
+
+Controller <-- MicroserviceController
+
+abstract class WordPrediction {
+    {method}+Add(words:string[]):void
+    {method}+Predict(words:string[]):string[]
+    {method}+Generate(words:strings[]):string
+}
+
+Class MarkovChain {
+    {field}-chain:Chain
+    {method}+MarkovChain()
+    {method}+Add(words:string[]):void
+    {method}+Predict(words:string[]):string[]
+    {method}+Generate(words:string[]):string
+    {method}+TransitionProbability(string, string[]):double
+    {method}+Read(is:istream*):void
+    {method}+Write(os:ostream*):void
+}
+
+class Chain {
+    {field}-chain:map<string,Node[]>
+    {method}+insert(node:Node):void
+}
+
+class Node {
+    {field}-next:<string,double>
+    {method}+GetFreq():double
+}
+
+' Word prediction
+WordPrediction <|-- MarkovChain
+MarkovChain "1" o-- "1" Chain
+Chain "1" o-- "*" Node
+
+note left of WordPrediction : For maintainbility and compatibility purposes,\nthe developer can implement\nhis/her own word prediction algorithm
+
+@enduml

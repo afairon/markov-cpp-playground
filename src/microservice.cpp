@@ -6,9 +6,23 @@ using namespace http;
 
 void MicroserviceController::opHandlers() {
     _listener.support(methods::GET, std::bind(&MicroserviceController::handleGet, this, std::placeholders::_1));
+    _listener.support(methods::POST, std::bind(&MicroserviceController::handlePost, this, std::placeholders::_1));
+    _listener.support(methods::PUT, std::bind(&MicroserviceController::handlePut, this, std::placeholders::_1));
+    _listener.support(methods::DEL, std::bind(&MicroserviceController::handleDelete, this, std::placeholders::_1));
+    _listener.support(methods::HEAD, std::bind(&MicroserviceController::handleHead, this, std::placeholders::_1));
+    _listener.support(methods::OPTIONS, std::bind(&MicroserviceController::handleOptions, this, std::placeholders::_1));
 }
 
 void MicroserviceController::handleGet(http_request message) {
+    auto path = requestPath(message);
+    if (!path.empty()) {
+        if (path.size() > 1 && path[0] == "api" && path[1] == "predict") {
+            auto response = json::value::object();
+            response["key"] = json::value::string("val");
+            message.reply(status_codes::OK, response);
+            return;
+        }
+    }
     message.reply(status_codes::NotImplemented, responseNotImpl(methods::GET));
 }
 

@@ -17,6 +17,10 @@ pplx::task<void> Controller::shutdown() {
     return _listener.close();
 }
 
+string Controller::relativePath(const http_request& message) {
+    return uri::decode(message.relative_uri().path());
+}
+
 vector<string> Controller::requestPath(const http_request& message) {
     auto relativePath = uri::decode(message.relative_uri().path());
     return uri::split_path(relativePath);
