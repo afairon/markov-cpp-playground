@@ -31,6 +31,9 @@ public:
     void Add(const std::vector<std::string>& seq);
     std::string Generate(NGram current);
     void Read(const std::string& filepath);
+    void PrintState();
+    void PrintFreq();
+    void PrintIntMap();
 protected:
     int AddState(std::string str);
 };

@@ -105,6 +105,23 @@ void MicroserviceController::handleGet(http_request message) {
     if (!path.empty()) {
         if (path[0] == "static") {
             return serveStatic("static", message);
+        } else if (path.size() > 1 && path[0] == "api" && path[1] == "generate") {
+            auto response = json::value::object();
+            NGram tokens = {StartToken};
+            for (; tokens.back() != EndToken;) {
+                NGram::const_iterator begin = tokens.begin() + tokens.size()-1;
+                NGram::const_iterator last = tokens.begin() + tokens.size();
+                NGram sub(begin, last);
+                std::string next = chain->Generate(sub);
+                tokens.push_back(next);
+            }
+            NGram::const_iterator begin = tokens.begin() + 1;
+            NGram::const_iterator last = tokens.begin() + tokens.size() - 1;
+            NGram sub(begin, last);
+            std::string generated = join(sub, " ");
+            response["next"] = json::value::string(generated);
+            message.reply(status_codes::OK, response);
+            return;
         }
     }
     concurrency::streams::fstream::open_istream("static/index.html", std::ios::in).then([=](concurrency::streams::istream is) {
