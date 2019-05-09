@@ -2,6 +2,7 @@
 #include <cpprest/filestream.h>
 #include "microservice_controller.hpp"
 #include "version.hpp"
+#include "utils.hpp"
 
 using namespace web;
 using namespace http;
@@ -102,20 +103,35 @@ void MicroserviceController::serveStatic(const std::string& filepath, const http
 void MicroserviceController::handleGet(http_request message) {
     auto path = requestPath(message);
     if (!path.empty()) {
-
         if (path[0] == "static") {
             return serveStatic("static", message);
-        } else if (path.size() > 1 && path[0] == "api" && path[1] == "predict") {
+        }
+    }
+    concurrency::streams::fstream::open_istream("static/index.html", std::ios::in).then([=](concurrency::streams::istream is) {
+        message.reply(status_codes::OK, is, "text/html; charset=UTF-8");
+    });
+}
+
+void MicroserviceController::handlePost(http_request message) {
+    auto path = requestPath(message);
+    if (!path.empty()) {
+        if (path.size() > 1 && path[0] == "api" && path[1] == "predict") {
             auto response = json::value::object();
-            response["key"] = json::value::string("val");
+            auto req = message.extract_json().get();
+            auto seq = req["seq"].as_string();
+            response["next"] = json::value::string(chain->Generate(split(seq, ' ')));
+            message.reply(status_codes::OK, response);
+            return;
+        } else if (path.size() > 1 && path[0] == "api" && path[1] == "train") {
+            auto response = json::value::object();
+            auto req = message.extract_json().get();
+            auto seq = req["seq"].as_string();
+            chain->Add(split(seq, ' '));
+            response["OK"] = json::value::boolean(true);
             message.reply(status_codes::OK, response);
             return;
         }
     }
-    message.reply(status_codes::NotFound);
-}
-
-void MicroserviceController::handlePost(http_request message) {
     message.reply(status_codes::NotImplemented, responseNotImpl(methods::POST));
 }
 
@@ -147,4 +163,8 @@ json::value MicroserviceController::responseNotImpl(const http::method& method) 
     response["method"] = json::value::string(U(method));
 
     return response;
+}
+
+void MicroserviceController::setChain(Chain* ch) {
+    chain = ch;
 }

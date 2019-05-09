@@ -2,8 +2,10 @@
 #include <map>
 #include <string>
 #include <vector>
-#include <stdlib.h>
+#include <cstdlib>
 #include <ctime>
+#include <fstream>
+#include <sstream>
 
 #include "chain.hpp"
 #include "utils.hpp"
@@ -96,9 +98,14 @@ vector<Pair> MakePairs(const vector<string>& tokens, const size_t order)
     return pairs;
 }
 
-void Chain::print() {
-    map<string, int>::iterator it;
-    for (it = stateMap.begin(); it != stateMap.end(); ++it) {
-        cout << it->first << endl;
+void Chain::Read(const string& filepath) {
+    string line;
+    vector<string> tokens;
+    ifstream fs(filepath);
+
+    while (!fs.eof()) {
+        getline(fs, line);
+        tokens = split(line, ' ');
+        Add(tokens);
     }
 }
