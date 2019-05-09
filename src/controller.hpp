@@ -10,6 +10,8 @@ using namespace http;
 
 class Controller {
     public:
+        Controller() {}
+        ~Controller() {}
         virtual void handleGet(http_request message) = 0;
         virtual void handlePost(http_request message) = 0;
         virtual void handlePut(http_request message) = 0;

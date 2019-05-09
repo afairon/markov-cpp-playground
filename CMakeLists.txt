@@ -8,6 +8,8 @@ find_package(Boost REQUIRED system)
 
 set(SERVER_SRC
     src/main.cpp
+    src/controller.cpp
+    src/microservice.cpp
 )
 
 add_executable(markovplay ${SERVER_SRC})

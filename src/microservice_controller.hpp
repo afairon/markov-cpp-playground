@@ -4,7 +4,11 @@
 #include "controller.hpp"
 
 class MicroserviceController : public Controller {
+    private:
+        static json::value responseNotImpl(const http::method& method);
     public:
+        MicroserviceController() : Controller() {}
+        ~MicroserviceController() {}
         void handleGet(http_request message) override;
         void handlePost(http_request message) override;
         void handlePut(http_request message) override;
