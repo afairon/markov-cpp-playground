@@ -43,7 +43,7 @@ class InterupHandler {
 }
 
 Controller <|-- MicroserviceController
-Controller <.. InterupHandler
+Controller ..> InterupHandler
 
 abstract class WordPrediction {
     {method}+Add(words:string[]):void
