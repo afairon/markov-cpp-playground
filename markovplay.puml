@@ -26,14 +26,14 @@ class MicroserviceController {
     -responseNotImpl(method:const http::method&):json::value
     +MicroserviceController(addr:const string&)
     +~MicroserviceController()
-    +handleGet(message:http_request):virtual void
-    +handlePost(message:http_request):virtual void
-    +handlePut(message:http_request):virtual void
-    +handleDelete(message:http_request):virtual void
-    +handlePatch(message:http_request):virtual void
-    +handleHead(message:http_request):virtual void
-    +handleOptions(message:http_request):virtual void
-    +opHandlers():virtual void
+    +handleGet(message:http_request):void
+    +handlePost(message:http_request):void
+    +handlePut(message:http_request):void
+    +handleDelete(message:http_request):void
+    +handlePatch(message:http_request):void
+    +handleHead(message:http_request):void
+    +handleOptions(message:http_request):void
+    +opHandlers():void
 }
 
 class InterupHandler {
@@ -43,6 +43,7 @@ class InterupHandler {
 }
 
 Controller <|-- MicroserviceController
+Controller <.. InterupHandler
 
 abstract class WordPrediction {
     {method}+Add(words:string[]):void

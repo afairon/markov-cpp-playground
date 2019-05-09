@@ -11,8 +11,20 @@ using namespace web;
 using namespace http;
 using namespace http::experimental::listener;
 
+typedef enum file_type {
+    UNKNOWN,
+    HTML,
+    CSS,
+    JS,
+    JPEG,
+    PNG,
+    WEBP,
+    ICO
+};
+
 class MicroserviceController : public Controller {
     private:
+        file_type getExt(const std::string& file) const;
         static json::value responseNotImpl(const http::method& method);
     public:
         MicroserviceController(const std::string& addr) : Controller(addr) {}

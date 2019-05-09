@@ -13,6 +13,27 @@ void MicroserviceController::opHandlers() {
     _listener.support(methods::OPTIONS, std::bind(&MicroserviceController::handleOptions, this, std::placeholders::_1));
 }
 
+file_type MicroserviceController::getExt(const std::string& file) const {
+    std::string ext = file.substr(file.find_last_of(".") + 1);
+    if (ext == "html") {
+        return HTML;
+    } else if (ext == "css") {
+        return CSS;
+    } else if (ext == "js") {
+        return JS;
+    } else if (ext == "jpg" || ext == "jpeg") {
+        return JPEG;
+    } else if (ext == "png") {
+        return PNG;
+    } else if (ext == "webp") {
+        return WEBP;
+    } else if (ext == "ico") {
+        return ICO;
+    }
+
+    return UNKNOWN;
+}
+
 void MicroserviceController::handleGet(http_request message) {
     auto path = requestPath(message);
     if (!path.empty()) {
