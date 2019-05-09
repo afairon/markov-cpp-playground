@@ -182,6 +182,6 @@ json::value MicroserviceController::responseNotImpl(const http::method& method) 
     return response;
 }
 
-void MicroserviceController::setChain(Chain* ch) {
+void MicroserviceController::setChain(WordPrediction* ch) {
     chain = ch;
 }

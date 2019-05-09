@@ -6,7 +6,7 @@
 #include <pplx/pplxtasks.h>
 
 #include "controller.hpp"
-#include "chain.hpp"
+#include "markovchain.hpp"
 
 using namespace web;
 using namespace http;
@@ -28,7 +28,7 @@ class MicroserviceController : public Controller {
         file_type getExt(const std::string& file) const;
         static json::value responseNotImpl(const http::method& method);
         void serveStatic(const std::string& path, const http_request& message);
-        Chain* chain;
+        WordPrediction* chain;
     public:
         MicroserviceController(const std::string& addr) : Controller(addr) {}
         ~MicroserviceController() {}
@@ -42,7 +42,7 @@ class MicroserviceController : public Controller {
 
         void opHandlers() override;
 
-        void setChain(Chain* chain);
+        void setChain(WordPrediction* chain);
 };
 
 #endif

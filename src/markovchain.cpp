@@ -7,12 +7,12 @@
 #include <fstream>
 #include <sstream>
 
-#include "chain.hpp"
+#include "markovchain.hpp"
 #include "utils.hpp"
 
 using namespace std;
 
-int Chain::AddState(string str)
+int MarkovChain::AddState(string str)
 {
     int index;
 
@@ -28,7 +28,7 @@ int Chain::AddState(string str)
 }
 
 // Add create a map spool
-void Chain::Add(const vector<string>& seq)
+void MarkovChain::Add(const vector<string>& seq)
 {
     for (int k = Order; k > 0; --k) {
         vector<string> tokens;
@@ -52,7 +52,7 @@ void Chain::Add(const vector<string>& seq)
     }
 }
 
-string Chain::Generate(NGram current)
+string MarkovChain::Generate(const NGram& current)
 {
     if (this->stateMap.find(join(current, "_")) == this->stateMap.end()) {
         return "";
@@ -106,7 +106,7 @@ vector<Pair> MakePairs(const vector<string>& tokens, const size_t order)
     return pairs;
 }
 
-void Chain::Read(const string& filepath) {
+void MarkovChain::Read(const string& filepath) {
     string line;
     vector<string> tokens;
     ifstream fs(filepath);
@@ -121,33 +121,4 @@ void Chain::Read(const string& filepath) {
         Add(tokens);
     }
     fs.close();
-}
-
-void Chain::PrintState()
-{
-    map<string, int>::iterator it;
-    for (it = this->stateMap.begin(); it != this->stateMap.end(); ++it) {
-        cout << it->first << ":" << it->second << endl;
-    }
-}
-
-void Chain::PrintIntMap()
-{
-    map<int, string>::iterator it;
-    for (it = this->intMap.begin(); it != this->intMap.end(); ++it) {
-        cout << it->first << ":" << it->second << endl;
-    }
-}
-
-void Chain::PrintFreq()
-{
-    map<int, SparseArray>::iterator it;
-    map<int, int>::iterator ik;
-    for (it = this->freqMat.begin(); it != this->freqMat.end(); ++it) {
-        cout << it->first << " ";
-        for (ik = it->second.begin(); ik != it->second.end(); ++ik) {
-            cout << ik->first << ":" << ik->second << " ";
-        }
-        cout << endl;
-    }
 }
