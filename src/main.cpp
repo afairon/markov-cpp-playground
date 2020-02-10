@@ -37,7 +37,7 @@ int main(int argc, char** argv) {
         cout << "Listening on " << server.uri() << endl;
         cout << "Waiting for incoming connections..." << endl;
 
-        InteruptHandler::waitInterupt();
+        InterruptHandler::waitInterrupt();
 
         server.shutdown().wait();
     } catch (exception& e) {
