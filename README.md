@@ -48,6 +48,6 @@ Listening on http://127.0.0.1:34568/
 Waiting for incoming connections...
 ```
 
-## Class diagram
+## Example
 
-![playground](out/markovplay/markov_playground.png)
+![image](image/image.png)

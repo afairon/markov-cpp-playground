@@ -6,7 +6,7 @@
 #include <ctime>
 
 #include "microservice_controller.hpp"
-#include "interupt_handler.hpp"
+#include "interrupt_handler.hpp"
 #include "markovchain.hpp"
 #include "utils.hpp"
 

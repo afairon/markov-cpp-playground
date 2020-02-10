@@ -6,8 +6,6 @@ enable_testing()
 
 find_package(Boost REQUIRED system)
 
-include_directories(include/)
-
 set(SERVER_SRC
     src/main.cpp
     src/controller.cpp
@@ -17,6 +15,7 @@ set(SERVER_SRC
 )
 
 add_executable(markovplay ${SERVER_SRC})
+target_include_directories(markovplay PUBLIC include)
 target_link_libraries(markovplay cpprest boost_system pthread crypto)
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
